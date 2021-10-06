@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	Démarrer une conversation
+{% endblock %}
+
+{% block body %}
+	<h1>Utilisateurs inscrits</h1>
+
+	<form action="">
+		<div class='mb-3 col-3'>
+			<label for="user_choice" class="form-label">Utilisateurs inscrits</label>
+			<select id="user_choice" class="form-select" aria-label="Default select example">
+				<option selected>Avec qui discuter ?</option>
+				{% for user in users %}
+					{% if 'ROLE_ADMIN' not in user.roles %}
+						<option value="1">{{ user.username }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+		</div>
+		<button type="submit" class="btn btn-primary">Démarrer</button>
+
+	</form>
+{% endblock %}
