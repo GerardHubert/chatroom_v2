@@ -6,11 +6,56 @@ const sender = document.getElementById('sender_hidden');
 const postButtonElement = document.getElementById('button-addon2');
 const postInputElement = document.getElementById('post_input_element');
 
+function clearPreviousChat() {
+    child = chatBox.lastElementChild;
+    while (child) {
+        chatBox.removeChild(child);
+        child = chatBox.lastElementChild;
+    }
+}
+
+function displayConversation(datas) {
+
+    clearPreviousChat();
+
+    if (datas !== 'null') {
+        for (const message of datas) {
+            //on crée l'élément message
+            let messageElement = document.createElement('ul');
+            messageElement.id = 'message';
+            messageElement.classList.add('list-group');
+            messageElement.classList.add('w-75');
+
+            // on crée le span de l'élément message
+            let badgeElement = document.createElement('span');
+            badgeElement.classList.add('badge');
+            badgeElement.classList.add('bg-primary');
+            badgeElement.classList.add('w-50')
+
+            // on crée le li de l'élément message
+            let msg = document.createElement('li');
+            msg.classList.add('list-group-item');
+            msg.classList.add('list-group-item-info');
+
+            // pour cahque message de la conversation, on hydrate les données dans les éléments et on les insère dans la chatbox
+            badgeElement.innerHTML = message.sender
+            msg.innerHTML = message.content;
+
+            messageElement.append(badgeElement);
+            messageElement.append(msg);
+            chatBox.appendChild(messageElement);
+        }
+    }
+}
 
 startButton.addEventListener('click', function (e) {
     e.preventDefault();
+
     // on récupère l'id du user avec qui discuter
-    console.log("on a choisit de discuté avec le user : " + userChoice.value)
+    userId = userChoice.value
+
+    // on envoie une requête ajax pour avoir la conversation avec cet utilisateur
+    getConversation(userId);
 })
 
 postButtonElement.addEventListener('click', function (e) {
@@ -28,31 +73,28 @@ postButtonElement.addEventListener('click', function (e) {
     data.append('recipient', recipientId);
     data.append('content', message);
 
-    //test();
-    console.log(data);
-    sendData(data);
+    sendData(data, recipientId);
 
-    // on raffraichit la zone de message avec le nouveau message (requête pour afficher)
 })
 
-function sendData(data) {
+function getConversation(id) {
+    let ajaxRequest = new XMLHttpRequest();
+    ajaxRequest.open('GET', 'https://localhost:8000/conversation/' + id);
+    ajaxRequest.responseType = 'json';
+    ajaxRequest.onload = function (e) {
+        datas = ajaxRequest.response;
+        displayConversation(datas)
+    }
+    ajaxRequest.send();
+}
+
+function sendData(data, recipientId) {
     let ajaxRequest = new XMLHttpRequest();
     ajaxRequest.open('POST', 'https://localhost:8000/addMessage');
     ajaxRequest.onload = function (e) {
-        console.log('requête terminée');
+        // on rappelle récupère tous les messages pour réaffichage avec le dernier posté
+        getConversation(recipientId);
     }
     ajaxRequest.send(data);
 }
-
-// function test() {
-//     // on configure une requête ajax
-//     let ajaxRequest = new XMLHttpRequest();
-//     ajaxRequest.open('GET', "https://localhost:8000/addMessage");
-//     ajaxRequest.responseType = 'json';
-//     ajaxRequest.onload = function (e) {
-//         console.log(ajaxRequest.response)
-//     };
-
-//     ajaxRequest.send();
-// }
 

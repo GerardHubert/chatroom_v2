@@ -47,6 +47,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $messagesReceived;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Conversation::class, mappedBy="relatesTo", cascade={"persist", "remove"})
+     */
+    private $conversation;
+
     public function __construct()
     {
         $this->messagesSent = new ArrayCollection();
@@ -193,6 +198,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $messagesReceived->setRecipient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getConversation(): ?Conversation
+    {
+        return $this->conversation;
+    }
+
+    public function setConversation(Conversation $conversation): self
+    {
+        // set the owning side of the relation if necessary
+        if ($conversation->getRelatesTo() !== $this) {
+            $conversation->setRelatesTo($this);
+        }
+
+        $this->conversation = $conversation;
 
         return $this;
     }

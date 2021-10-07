@@ -14,11 +14,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class SaveMessageController extends AbstractController
 {
     private $em;
+    private $conversationController;
 
-    public function __construct(EntityManagerInterface $em, UserRepository $userRepo)
+    public function __construct(EntityManagerInterface $em, UserRepository $userRepo, ConversationController $conversationController)
     {
         $this->em = $em;
         $this->userRepo = $userRepo;
+        $this->conversationController = $conversationController;
     }
 
     /**
@@ -43,6 +45,10 @@ class SaveMessageController extends AbstractController
             ->setCreatedAt(new DateTime());
 
         $this->em->persist($message);
+
+        // on ajoute le message à une conversation
+        $this->conversationController->addMessageToConversation($message);
+
         $this->em->flush();
 
         return new JsonResponse();

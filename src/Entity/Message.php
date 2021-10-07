@@ -38,6 +38,12 @@ class Message
      */
     private $createdAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Conversation::class, inversedBy="messages")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $conversation;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +93,18 @@ class Message
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getConversation(): ?Conversation
+    {
+        return $this->conversation;
+    }
+
+    public function setConversation(?Conversation $conversation): self
+    {
+        $this->conversation = $conversation;
 
         return $this;
     }
