@@ -5,20 +5,34 @@
 
 {% block body %}
 	<h1>Utilisateurs inscrits</h1>
-
-	<form action="">
-		<div class='mb-3 col-3'>
-			<label for="user_choice" class="form-label">Utilisateurs inscrits</label>
-			<select id="user_choice" class="form-select" aria-label="Default select example">
-				<option selected>Avec qui discuter ?</option>
-				{% for user in users %}
-					{% if 'ROLE_ADMIN' not in user.roles %}
-						<option value="1">{{ user.username }}</option>
-					{% endif %}
-				{% endfor %}
-			</select>
+	<div class='d-flex justify-content-between'>
+		<form action="">
+			<div class='mb-4'>
+				<label for="user_choice" class="form-label">Utilisateurs inscrits</label>
+				<select id="user_choice" class="form-select" aria-label="Default select example">
+					<option selected>Avec qui discuter ?</option>
+					{% for user in users %}
+						{% if 'ROLE_ADMIN' not in user.roles %}
+							<option value="{{ user.id }}">{{ user.username }}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+			</div>
+			<button id="start_button" type="submit" class="btn btn-primary">Démarrer</button>
+		</form>
+		<div id="chat_box" class='border border-primary rounded col-6 d-flex flex-column justify-content-between' style='height: 70vh'>
+			<div id='messages_list'>
+				<ul id="message" class="list-group w-75">
+					<span class="badge bg-primary w-50">auteur et date</span>
+					<li class="list-group-item list-group-item-info">Le message ici</li>
+				</ul>
+			</div>
+			<div class="input-group mb-3">
+				<input id='post_input_element' type="text" class="form-control" placeholder="Votre message ici" aria-label="Votre message ici" aria-describedby="button-addon2">
+				<button class="btn btn-outline-primary" type="button" id="button-addon2">Poster</button>
+				<input id="sender_hidden" type="hidden" name="sender" value="{{ app.user.id }}">
+			</div>
 		</div>
-		<button type="submit" class="btn btn-primary">Démarrer</button>
-
-	</form>
+	</div>
+	<script src="/js/chatbox.js"></script>
 {% endblock %}

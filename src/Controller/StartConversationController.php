@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class StartConversation extends AbstractController
+class StartConversationController extends AbstractController
 {
     private $userRepo;
     private $em;
