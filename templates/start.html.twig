@@ -21,12 +21,7 @@
 			<button id="start_button" type="submit" class="btn btn-primary">Démarrer</button>
 		</form>
 		<div id="chat_box" class='border border-primary rounded col-6 d-flex flex-column justify-content-between' style='height: 70vh'>
-			<div id='messages_list'>
-				<ul id="message" class="list-group w-75">
-					<span class="badge bg-primary w-50">auteur et date</span>
-					<li class="list-group-item list-group-item-info">Le message ici</li>
-				</ul>
-			</div>
+			<div id='messages_list' class='overflow-auto'></div>
 			<div class="input-group mb-3">
 				<input id='post_input_element' type="text" class="form-control" placeholder="Votre message ici" aria-label="Votre message ici" aria-describedby="button-addon2">
 				<button class="btn btn-outline-primary" type="button" id="button-addon2">Poster</button>

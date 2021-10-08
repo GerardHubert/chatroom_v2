@@ -32,11 +32,24 @@ class StartConversationController extends AbstractController
     }
 
     /**
-     * @Route("/chat/{id}", name="chat")
+     * @Route("/chat/{id}", name="user_chat")
      */
     public function chat($id)
     {
         $user = $this->em->getRepository(User::class)->find($id);
-        dd($user);
+
+        // transmettre l'id de l'admin
+        $users = $this->em->getRepository(User::class)->findAll();
+
+        foreach ($users as $user) {
+            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                $adminId = $user->getId();
+            };
+        }
+
+        return $this->render('user_chat.html.twig', [
+            'user' => $user,
+            'admin' => $adminId
+        ]);
     }
 }

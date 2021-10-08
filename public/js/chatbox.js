@@ -45,6 +45,8 @@ function displayConversation(datas) {
             messageElement.append(msg);
             chatBox.appendChild(messageElement);
         }
+
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 }
 
@@ -56,6 +58,9 @@ startButton.addEventListener('click', function (e) {
 
     // on envoie une requête ajax pour avoir la conversation avec cet utilisateur
     getConversation(userId);
+    const interval = window.setInterval(
+        getConversation, 3000, userId
+    )
 })
 
 postButtonElement.addEventListener('click', function (e) {
@@ -92,7 +97,9 @@ function sendData(data, recipientId) {
     let ajaxRequest = new XMLHttpRequest();
     ajaxRequest.open('POST', 'https://localhost:8000/addMessage');
     ajaxRequest.onload = function (e) {
-        // on rappelle récupère tous les messages pour réaffichage avec le dernier posté
+        postInputElement.value = '';
+        postInputElement.focus();
+        // on récupère tous les messages pour réaffichage avec le dernier posté
         getConversation(recipientId);
     }
     ajaxRequest.send(data);

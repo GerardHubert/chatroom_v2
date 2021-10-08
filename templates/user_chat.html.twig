@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	Zone de discussion
+{% endblock %}
+{% block body %}
+	<h1>Vos échages avec l'admin</h1>
+
+	<div id="chat_box" class='border border-primary rounded col-6 d-flex flex-column justify-content-between' style='height: 70vh'>
+		<div id='messages_list' class='overflow-auto'></div>
+		<div class="input-group mb-3">
+			<input id='post_input_element' type="text" class="form-control" placeholder="Votre message ici" aria-label="Votre message ici" aria-describedby="button-addon2">
+			<button class="btn btn-outline-primary" type="button" id="button-addon2">Poster</button>
+			<input id="sender_hidden" type="hidden" name="sender" value="{{ app.user.id }}">
+			<input id="recipient_hidden" type="hidden" name="recipient" value="{{ admin }}">
+		</div>
+	</div>
+	<script src="/js/userChatBox.js"></script>
+{% endblock %}
